@@ -52,9 +52,11 @@ end
 figure; 
 imshow(img)
 hold on; 
-plot(sol(1).y0, sol(1).x0, 'r*');
-plot(sol(2).y0, sol(2).x0, 'r*');
-plot(sol(3).y0, sol(3).x0, 'r*');
+plot(sol(1).x0, sol(1).y0, 'r*');
+plot(sol(2).x0, sol(2).y0, 'r*');
+plot(sol(3).x0, sol(3).y0, 'r*');
+
+
 
 
 
