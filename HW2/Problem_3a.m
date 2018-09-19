@@ -1,5 +1,5 @@
 %% Machine Vision Homework 2
-% Problem 2
+% Problem 3
 % Arthor: Xinyi Cai
 
 %% Part 1
