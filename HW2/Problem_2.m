@@ -8,7 +8,7 @@
 clc; 
 clear all; 
 
-% Solution
+%% Import the image and low level processing
 img = imread('HW2.bmp'); 
 img_gray = rgb2gray(img); 
 img_BW = imbinarize(img_gray); 
@@ -21,74 +21,62 @@ y0 = B(:, 1);
 
 img_stats = regionprops('table', bwconncomp(img_BW));
 centroids = cat(1, img_stats.Centroid);
+
 xc = centroids(1,1); 
 yc = centroids(1,2); 
 
-figure; 
-scatter(x0, y0)
-hold on
-plot(xc, yc, 'b*')
-hold off
+% figure; 
+% scatter(x0, y0)
+% hold on
+% plot(xc, yc, 'b*')
+% hold off
 
+%% Calculate the rho-theta signature
 x_X = x0 - xc;
 y_Y = y0 - yc; 
+
 for i = 1:length(B)
-    theta(i, :) = atan2(y_Y(i), x_X(i))*180/pi; 
-    rho(i, :) = sqrt(y_Y(i)^2 + x_X(i)^2);
+    if (y_Y(i) >= 0) && (x_X(i) >= 0)
+        theta(i, :) = atan2(abs(y_Y(i)), abs(x_X(i)))*180/pi; 
+        rho(i, :) = sqrt(y_Y(i)^2 + x_X(i)^2);
+        
+    elseif (y_Y(i) > 0) && (x_X(i) < 0)
+        theta(i, :) = 180 - atan2(abs(y_Y(i)), abs(x_X(i)))*180/pi;
+        rho(i, :) = sqrt(y_Y(i)^2 + x_X(i)^2);
+        
+    elseif (y_Y(i) < 0) && (x_X(i) < 0)
+        theta(i, :) = atan2(abs(y_Y(i)), abs(x_X(i)))*180/pi + 180;
+        rho(i, :) = sqrt(y_Y(i)^2 + x_X(i)^2);
+        
+    elseif (y_Y(i) < 0) && (x_X(i) > 0)
+        theta(i, :) = 360 - atan2(abs(y_Y(i)), abs(x_X(i)))*180/pi;
+        rho(i, :) = sqrt(y_Y(i)^2 + x_X(i)^2);
+    end
 end
 
+%% Find the peaks in the rho-theta graph
 [peaks, valleys] = peakdet(rho, 5, theta);
+
 theta_peaks = peaks(:,1); 
 rho_peaks = peaks(:,2); 
 
 figure; 
 scatter(theta, rho)
 hold on;
-plot(theta_peaks, rho_peaks, 'r*');
+scatter(theta_peaks, rho_peaks, 30, 'r*');
 
-syms X0 Y0
+%% Translate from image coord back to global coord
+X0 = zeros(length(peaks), 1); 
+Y0 = zeros(length(peaks), 1); 
 
-for i = 1:length(peaks)
-    eqn1 = tand(theta_peaks(i))*(X0 - xc) + yc == Y0; 
-    eqn2 = sqrt(rho_peaks(i)^2 - (X0 - xc)^2) + yc == Y0; 
-    
-    sol(i) = solve([eqn1, eqn2], [X0, Y0]); 
+for i = 1:length(peaks)   
+    X0(i) = xc + rho_peaks(i)*cosd(theta_peaks(i)); 
+    Y0(i) = yc + rho_peaks(i)*sind(theta_peaks(i)); 
 end
 
 %% Plot the graph
-% rot_angle = 90; 
-% R = [cosd(rot_angle), -sind(rot_angle);... 
-%      sind(rot_angle), cosd(rot_angle)];
-R = 1;  
-point1 = [sol(1).X0, sol(1).Y0]*R; 
-point2 = [sol(2).X0, sol(2).Y0]*R; 
-point3 = [sol(3).X0, sol(3).Y0]*R; 
-
 figure; 
+imshow(img)
 hold on; 
-plot(point1(1, 2), point1(1, 1), 'r*');
-plot(point2(1, 2), point2(1, 1), 'r*');
-plot(point3(1, 2), point3(1, 1), 'r*');
-% imshow(img)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+scatter(X0, Y0, 80, 'r*')
+hold off
