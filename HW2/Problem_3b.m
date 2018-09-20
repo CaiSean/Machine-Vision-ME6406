@@ -1,5 +1,5 @@
 %% Machine Vision Homework 2
-% Problem 3
+% Problem 3 Part b
 % Arthor: Xinyi Cai
 
 %% Part 2
@@ -8,29 +8,61 @@
 clc; 
 clear all; 
 
-% Given
-x_t = [0, 2, 5]; 
-y_t = [0, 7, 3]; 
-X_i = [5.500,4.470,12.845]; 
-Y_i = [10.500,25.024,19.558]; 
+x_t = [1, 3, 4, 3, 1, 0]'; 
+y_t = [0, 0, 3, 5, 4, 2]'; 
 
-X_c = 0.5*(max(x_t)-min(x_t)); 
-Y_c = 0.5*(max(y_t)-min(y_t)); 
+x_i = [3.147, 4.748, 6.223, 3.321]'; 
+y_i = [9.726, 7.3, 12.453, 12.628]'; 
 
-j = 1:2:5;
-k = 2:2:6; 
+% Find all possible permutations of vertices to form unique triangles
+C_x_t = nchoosek(x_t, 3); 
+C_y_t = nchoosek(y_t, 3); 
 
-for i = 1:3
-    A(j(i):j(i)+1, 1:4) = [x_t(i), -y_t(i), 1, 0;...
-                           y_t(i), x_t(i), 0, 1];
-    R(j(i), 1) = X_i(i); 
-    R(k(i), 1) = Y_i(i);
+C_x_i = nchoosek(x_i, 3); 
+C_y_i = nchoosek(y_i, 3); 
+
+% Plot the triangles
+figure; 
+hold on
+for i = 1:length(C_x_t)
+    plot([C_x_t(i, :), C_x_t(i, 1)], [C_y_t(i, :), C_y_t(i, 1)])
 end
 
-Q = pinv(A)*R; 
+for i = 1:length(C_x_i)
+    plot([C_x_i(i, :), C_x_i(i, 1)], [C_y_i(i, :), C_y_i(i, 1)])
+end
 
-k = sqrt(Q(1)^2+Q(2)^2)
-theta = atan2(Q(2), Q(1))*180/pi
-x_d = Q(3) - X_c
-y_d = Q(4) - Y_c
-    
+hold off
+
+% Find all possible match
+for i = 1:length(C_x_t)
+    for j = 1:length(C_x_i)
+        
+        
+        
+    end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
