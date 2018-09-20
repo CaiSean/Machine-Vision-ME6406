@@ -32,17 +32,23 @@ for i = 1:length(C_x_i)
     plot([C_x_i(i, :), C_x_i(i, 1)], [C_y_i(i, :), C_y_i(i, 1)])
 end
 
+xlim([0 15])
+ylim([0 15])
+
 hold off
 
 % Find all possible match
 for i = 1:length(C_x_t)
-    for j = 1:length(C_x_i)
-        
-        
-        
-    end
+    temp_point_1 = [C_x_t(i, 1), C_y_t(i, 1)]; 
+    temp_point_2 = [C_x_t(i, 2), C_y_t(i, 2)]; 
+    temp_point_3 = [C_x_t(i, 3), C_y_t(i, 3)]; 
+    
+    length_t(i, 1) = norm(temp_point_1 - temp_point_2); 
+    length_t(i, 2) = norm(temp_point_1 - temp_point_3); 
+    length_t(i, 3) = norm(temp_point_2 - temp_point_3); 
 end
 
+d
 
 
 
