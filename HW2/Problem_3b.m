@@ -85,7 +85,7 @@ for i = 1:length(tri_angle_t_sort)
 end
 
 %% Find the matched pairs
-tolerance_length = 2e-4; 
+tolerance_length = 1.8e-4; 
 tolerance_angle = 2e-2; 
 
 [matched_pairs_length] = matching_process(length_ratio, tolerance_length, 0);
