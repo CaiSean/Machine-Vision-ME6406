@@ -85,7 +85,7 @@ for i = 1:length(tri_angle_t_sort)
 end
 
 %% Find the matched pairs
-tolerance_length = 1.8e-4; 
+tolerance_length = 2e-4; 
 tolerance_angle = 2e-2; 
 
 [matched_pairs_length] = matching_process(length_ratio, tolerance_length, 0);
@@ -109,54 +109,49 @@ end
 
 %% Plot the best matched triangles
 figure; 
-hold on
-colors = ['b', 'k', 'r', 'g', 'y', 'm']; 
 
 for i = 1:length(point_loc_x_t)
+    subplot(2, 3, i)
     plot([point_loc_x_t(i, :), point_loc_x_t(i, 1)],...
-         [point_loc_y_t(i, :), point_loc_y_t(i, 1)], colors(i)); 
+         [point_loc_y_t(i, :), point_loc_y_t(i, 1)],'r'); 
+    hold on
     plot([point_loc_x_i(i, :), point_loc_x_i(i, 1)],...
-         [point_loc_y_i(i, :), point_loc_y_i(i, 1)], colors(i)); 
+         [point_loc_y_i(i, :), point_loc_y_i(i, 1)], 'b'); 
+     
+    xlim([0 15])
+    ylim([0 15])
+    legend('Template', 'Image')
+    hold off
 end
-
-xlim([0 15])
-ylim([0 15])
-hold off
 
 %% Transformation parameters calculation
 
-
-% X_c = 0.5*(max(x_t)-min(x_t)); 
-% Y_c = 0.5*(max(y_t)-min(y_t)); 
-
-j = 1:2:(2*length(point_loc_x_t)-1);
-k = 2:2:(2*length(point_loc_x_t)); 
-
+a = 1:2:5;
+b = 2:2:6;
+ 
 for i = 1:length(point_loc_x_t)
-    A(j(i):j(i)+1, 1:4) = [point_loc_x_t(i), -point_loc_y_t(i), 1, 0;...
-                           point_loc_y_t(i), point_loc_x_t(i), 0, 1];
-    R(j(i), 1) = point_loc_x_i(i); 
-    R(k(i), 1) = point_loc_y_i(i);
+    count = 1; 
+    for j = 1:3
+        A(a(count):a(count)+1, 1:4) = [point_loc_x_t(i, j), -point_loc_y_t(i, j), 1, 0;...
+                                       point_loc_y_t(i, j), point_loc_x_t(i, j), 0, 1];
+        R(a(count), 1) = point_loc_x_i(i, j);
+        R(b(count), 1) = point_loc_y_i(i, j);
+        count = count + 1; 
+
+    end
+    
+    Q(i, 1:4) = pinv(A)*R;
+    
+    X_c(i, :) = 0.5 * (max(point_loc_x_t(i, :)) - min(point_loc_x_t(i, :))); 
+    Y_c(i, :) = 0.5 * (max(point_loc_y_t(i, :)) - min(point_loc_y_t(i, :))); 
+    
 end
 
-Q = pinv(A)*R; 
+clear a b
 
-k = sqrt(Q(1)^2+Q(2)^2)
-theta = atan2(Q(2), Q(1))*180/pi
-% x_d = Q(3) - X_c
-% y_d = Q(4) - Y_c
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+for i = 1:length(Q)
+    K(i, 1) = sqrt(Q(i, 1)^2 + Q(i, 2)^2);
+    theta(i, 1) = atan2(Q(i, 2), Q(i, 1)) * 180/pi;
+    x_d(i, 1) = Q(i, 3) - X_c(i);
+    y_d(i, 1) = Q(i, 4) - Y_c(i);
+end
