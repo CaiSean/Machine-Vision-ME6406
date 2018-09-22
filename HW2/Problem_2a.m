@@ -1,10 +1,8 @@
 %% Machine Vision Homework 2
-% Problem 2
+% Problem 2 Part a
 % Arthor: Xinyi Cai
 
-%% Part 1
-
-% Housekeeping
+%% Housekeeping
 clc; 
 clear all; 
 

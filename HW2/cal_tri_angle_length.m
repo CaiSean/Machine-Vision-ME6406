@@ -1,4 +1,8 @@
-function [length_mtx, angle_mtx] = cal_tri_length(x, y)
+%% Machine Vision Homework 2
+% Supporting function for Problem 3 Part b
+% Arthor: Xinyi Cai
+
+function [length_mtx, angle_mtx] = cal_tri_angle_length(x, y)
 
 length_mtx = zeros(length(x), 4); % Initial the matrix
 angle_mtx = zeros(length(x), 4); % Initial the matrix

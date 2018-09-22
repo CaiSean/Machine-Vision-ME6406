@@ -3,18 +3,18 @@
 % Arthor: Xinyi Cai
 
 %% Part 2
-
 % Housekeeping
 clc; 
 clear all; 
 
 %% Given points
-
 x_t = [1, 3, 4, 3, 1, 0]'; 
 y_t = [0, 0, 3, 5, 4, 2]'; 
+idx_t = [1, 2, 3, 4, 5, 6]';
 
 x_i = [3.147, 4.748, 6.223, 3.321]'; 
 y_i = [9.726, 7.3, 12.453, 12.628]'; 
+idx_i = ['a', 'b', 'c', 'd']'; 
 
 %% Find all possible permutations of vertices to form unique triangles
 C_x_t = nchoosek(x_t, 3); 
@@ -39,8 +39,8 @@ C_y_i = nchoosek(y_i, 3);
 % hold off
 
 %% Find the length and angle in triangles
-[tri_length_t, tri_angle_t] = cal_tri_length(C_x_t, C_y_t);
-[tri_length_i, tri_angle_i] = cal_tri_length(C_x_i, C_y_i);
+[tri_length_t, tri_angle_t] = cal_tri_angle_length(C_x_t, C_y_t);
+[tri_length_i, tri_angle_i] = cal_tri_angle_length(C_x_i, C_y_i);
 
 %% Sorting length and orders
 [tri_length_t_sort] = sort_matrix_row_descending(tri_length_t);
@@ -117,6 +117,14 @@ for i = 1:length(point_loc_x_t)
     hold on
     plot([point_loc_x_i(i, :), point_loc_x_i(i, 1)],...
          [point_loc_y_i(i, :), point_loc_y_i(i, 1)], 'b'); 
+    
+    for j = 1:3
+        offset = 0.8;
+        text(point_loc_x_t(i, j) - offset, point_loc_y_t(i, j) + offset,...
+             ['(' num2str(point_loc_x_t(i, j)),',' num2str(point_loc_y_t(i, j)) ')']);
+        text(point_loc_x_i(i, j) - offset, point_loc_y_i(i, j) + offset,...
+             ['(' num2str(point_loc_x_i(i, j)),',' num2str(point_loc_y_i(i, j)) ')']);
+    end
      
     xlim([0 15])
     ylim([0 15])

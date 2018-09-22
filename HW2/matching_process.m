@@ -1,3 +1,9 @@
+%% Machine Vision Homework 2
+% Supporting function for Problem 3 Part b
+% Arthor: Xinyi Cai
+
+% n = 0 when the difference between two data arrays are NOT found. 
+% n = 1 when the difference between two data arrays are found. 
 function [matched_pairs] = matching_process(raw_data, tolerance, n)
 
 count = 1;

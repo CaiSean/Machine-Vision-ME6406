@@ -1,3 +1,8 @@
+%% Machine Vision Homework 2
+% Supporting function for Problem 3 Part b
+% Arthor: Xinyi Cai
+% This function sort the values in each row of a matix in descending order
+
 function [sorted_matrix] = sort_matrix_row_descending(unsorted_matrix)
  
 sorted_matrix = zeros(length(unsorted_matrix), 4); 
