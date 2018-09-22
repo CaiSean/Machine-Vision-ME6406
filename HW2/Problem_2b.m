@@ -16,3 +16,5 @@ B = bwboundaries(img_BW, 'holes');
 B = B{1}; 
 x0 = B(:, 2); 
 y0 = B(:, 1); 
+
+img_gau = imgaussfilt(img_gray, 3); 
