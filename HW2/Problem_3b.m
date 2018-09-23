@@ -43,10 +43,17 @@ C_y_i = nchoosek(y_i, 3);
 [tri_length_i, tri_angle_i] = cal_tri_angle_length(C_x_i, C_y_i);
 
 %% Sorting length and orders
-[tri_length_t_sort] = sort_matrix_row_descending(tri_length_t);
-[tri_length_i_sort] = sort_matrix_row_descending(tri_length_i);
-[tri_angle_t_sort] = sort_matrix_row_descending(tri_angle_t);
-[tri_angle_i_sort] = sort_matrix_row_descending(tri_angle_i);
+[tri_length_t_sort, I_t] = sort(tri_length_t(:, 1:3), 2, 'descend'); 
+[tri_length_i_sort, I_i] = sort(tri_length_i(:, 1:3), 2, 'descend'); 
+[tri_angle_t_sort] = sort(tri_angle_t(:, 1:3), 2, 'descend'); 
+[tri_angle_i_sort] = sort(tri_angle_i(:, 1:3), 2, 'descend'); 
+
+tri_length_t_sort = [tri_length_t_sort, tri_length_t(:, 4)]; 
+tri_length_i_sort = [tri_length_i_sort, tri_length_i(:, 4)]; 
+tri_angle_t_sort = [tri_angle_t_sort, tri_angle_t(:, 4)]; 
+tri_angle_i_sort = [tri_angle_i_sort, tri_angle_i(:, 4)]; 
+
+
 
 %% Find the ratio between the template and image triangle length
 count = 1;
@@ -107,59 +114,64 @@ for i = 1:length(matched_pairs_length)
     end
 end
 
-%% Plot the best matched triangles
-figure; 
+%% 
+for i = 1:3
+    for j = 1:length(point_loc_x_t)
+        
 
-for i = 1:length(point_loc_x_t)
-    subplot(2, 3, i)
-    plot([point_loc_x_t(i, :), point_loc_x_t(i, 1)],...
-         [point_loc_y_t(i, :), point_loc_y_t(i, 1)],'r'); 
-    hold on
-    plot([point_loc_x_i(i, :), point_loc_x_i(i, 1)],...
-         [point_loc_y_i(i, :), point_loc_y_i(i, 1)], 'b'); 
-    
-    for j = 1:3
-        offset = 0.8;
-        text(point_loc_x_t(i, j) - offset, point_loc_y_t(i, j) + offset,...
-             ['(' num2str(point_loc_x_t(i, j)),',' num2str(point_loc_y_t(i, j)) ')']);
-        text(point_loc_x_i(i, j) - offset, point_loc_y_i(i, j) + offset,...
-             ['(' num2str(point_loc_x_i(i, j)),',' num2str(point_loc_y_i(i, j)) ')']);
-    end
-     
-    xlim([0 15])
-    ylim([0 15])
-    legend('Template', 'Image')
-    hold off
-end
-
-%% Transformation parameters calculation
-
-a = 1:2:5;
-b = 2:2:6;
- 
-for i = 1:length(point_loc_x_t)
-    count = 1; 
-    for j = 1:3
-        A(a(count):a(count)+1, 1:4) = [point_loc_x_t(i, j), -point_loc_y_t(i, j), 1, 0;...
-                                       point_loc_y_t(i, j), point_loc_x_t(i, j), 0, 1];
-        R(a(count), 1) = point_loc_x_i(i, j);
-        R(b(count), 1) = point_loc_y_i(i, j);
-        count = count + 1; 
-
-    end
-    
-    Q(i, 1:4) = pinv(A)*R;
-    
-    X_c(i, :) = 0.5 * (max(point_loc_x_t(i, :)) - min(point_loc_x_t(i, :))); 
-    Y_c(i, :) = 0.5 * (max(point_loc_y_t(i, :)) - min(point_loc_y_t(i, :))); 
-    
-end
-
-clear a b
-
-for i = 1:length(Q)
-    K(i, 1) = sqrt(Q(i, 1)^2 + Q(i, 2)^2);
-    theta(i, 1) = atan2(Q(i, 2), Q(i, 1)) * 180/pi;
-    x_d(i, 1) = Q(i, 3) - X_c(i);
-    y_d(i, 1) = Q(i, 4) - Y_c(i);
-end
+% % Plot the best matched triangles
+% figure; 
+% 
+% for i = 1:length(point_loc_x_t)
+%     subplot(2, 3, i)
+%     plot([point_loc_x_t(i, :), point_loc_x_t(i, 1)],...
+%          [point_loc_y_t(i, :), point_loc_y_t(i, 1)],'r'); 
+%     hold on
+%     plot([point_loc_x_i(i, :), point_loc_x_i(i, 1)],...
+%          [point_loc_y_i(i, :), point_loc_y_i(i, 1)], 'b'); 
+%     
+%     for j = 1:3
+%         offset = 0.8;
+%         text(point_loc_x_t(i, j) - offset, point_loc_y_t(i, j) + offset,...
+%              ['(' num2str(point_loc_x_t(i, j)),',' num2str(point_loc_y_t(i, j)) ')']);
+%         text(point_loc_x_i(i, j) - offset, point_loc_y_i(i, j) + offset,...
+%              ['(' num2str(point_loc_x_i(i, j)),',' num2str(point_loc_y_i(i, j)) ')']);
+%     end
+%      
+%     xlim([0 15])
+%     ylim([0 15])
+%     legend('Template', 'Image')
+%     hold off
+% end
+% 
+% %% Transformation parameters calculation
+% 
+% a = 1:2:5;
+% b = 2:2:6;
+%  
+% for i = 1:length(point_loc_x_t)
+%     count = 1; 
+%     for j = 1:3
+%         A(a(count):a(count)+1, 1:4) = [point_loc_x_t(i, j), -point_loc_y_t(i, j), 1, 0;...
+%                                        point_loc_y_t(i, j), point_loc_x_t(i, j), 0, 1];
+%         R(a(count), 1) = point_loc_x_i(i, j);
+%         R(b(count), 1) = point_loc_y_i(i, j);
+%         count = count + 1; 
+% 
+%     end
+%     
+%     Q(i, 1:4) = pinv(A)*R;
+%     
+%     X_c(i, :) = 0.5 * (max(point_loc_x_t(i, :)) - min(point_loc_x_t(i, :))); 
+%     Y_c(i, :) = 0.5 * (max(point_loc_y_t(i, :)) - min(point_loc_y_t(i, :))); 
+%     
+% end
+% 
+% clear a b
+% 
+% for i = 1:length(Q)
+%     K(i, 1) = sqrt(Q(i, 1)^2 + Q(i, 2)^2);
+%     theta(i, 1) = atan2(Q(i, 2), Q(i, 1)) * 180/pi;
+%     x_d(i, 1) = Q(i, 3) - X_c(i);
+%     y_d(i, 1) = Q(i, 4) - Y_c(i);
+% end
