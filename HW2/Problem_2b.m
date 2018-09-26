@@ -17,33 +17,30 @@ B = B{1};
 x0 = B(:, 2); 
 y0 = B(:, 1); 
 
-for i = 1:(length(x0) - 1)
-    ds(i, 1) = sqrt((x0(i) - x0(i+1))^2 + (y0(i) - y0(i+1))^2); 
-    s(i, 1) = sum(ds(1:i)); 
 
-end
 
 %%
 gaus_fun = @(s, sigma) 1/(sigma*sqrt(2*pi))*exp(-s^2/(2*sigma^2)); 
 
 sigma = 3; 
-for i = 1:length(s)
-    gaus(i, 1) = gaus_fun(s(i), sigma); 
+for i = 1:length(x0)-1
+    gaus(i, 1) = gaus_fun(x(i), sigma); 
     
-    X(i, 1) = conv(x0(i), gaus(i)); 
-    Y(i, 1) = conv(y0(i), gaus(i)); 
+    X(i, 1) = x0(i+1) - x0(i); 
+    Y(i, 1) = y0(i+1) - y0(i); 
+    
+    X(i, 1) = conv(x0(i), gaus(i), 'same'); 
+    Y(i, 1) = conv(y0(i), gaus(i), 'same'); 
 end
 
-
-
 for i = 1:length(X)-1
-    X_dot(i, 1) = (X(i+1)-X(i))/(s(i+1)-s(i)); 
-    Y_dot(i, 1) = (Y(i+1)-Y(i))/(s(i+1)-s(i)); 
+    X_dot(i, 1) = X(i+1) - X(i); 
+    Y_dot(i, 1) = Y(i+1) - Y(i); 
 end
 
 for i = 1:length(X_dot)-1
-    X_ddot(i, 1) = (X_dot(i+1)-X_dot(i))/(s(i+1)-s(i)); 
-    Y_ddot(i, 1) = (X_dot(i+1)-X_dot(i))/(s(i+1)-s(i)); 
+    X_ddot(i, 1) = X_dot(i+1) - X_dot(i); 
+    Y_ddot(i, 1) = X_dot(i+1) - X_dot(i); 
 end
 
 for i = 1:length(X_ddot)
@@ -53,7 +50,7 @@ end
 
 
 %% Plot the diagram
-scatter(s(1:length(K)), K)
+%%scatter(s(1:length(K)), K)
 
 
 
