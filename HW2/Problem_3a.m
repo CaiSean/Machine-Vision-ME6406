@@ -32,6 +32,16 @@ figure;
 plot([x_t, x_t(1)], [y_t, y_t(1)], 'r')
 hold on 
 plot([X_i, X_i(1)], [Y_i, Y_i(1)], 'g')
+
+for i = 1:length(x_t)
+    text(x_t(i), y_t(i),...
+        ['(' num2str(x_t(i)),',' num2str(y_t(i)) ')']);
+    text(X_i(i), Y_i(i),...
+        ['(' num2str(X_i(i)),',' num2str(Y_i(i)) ')']);
+end
+
+xlim([0 30])
+ylim([0 30])
 legend('Original Triangle', 'Transformed Triangle')
 
 %% 2. Pseudo-inverse (Verification)

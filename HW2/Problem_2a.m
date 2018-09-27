@@ -62,6 +62,10 @@ figure;
 scatter(theta, rho)
 hold on;
 scatter(theta_peaks, rho_peaks, 30, 'r*');
+title('Rho-Theta Plot')
+xlabel('\theta (degree)')
+ylabel('\rho ')
+hold off
 
 %% Translate from image coord back to global coord
 X0 = zeros(length(peaks), 1); 
@@ -77,4 +81,9 @@ figure;
 imshow(img)
 hold on; 
 scatter(X0, Y0, 80, 'r*')
+for i = 1:length(X0)
+    text(X0(i)+10, Y0(i)-5,...
+        ['(' num2str(X0(i)),',' num2str(Y0(i)) ')']);
+end
+title('Corner detection on the image')
 hold off

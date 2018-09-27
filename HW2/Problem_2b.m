@@ -58,6 +58,7 @@ scatter(K_idx_peaks, K_peaks, 30, 'r', '^');
 xlabel('Number of Pixels')
 ylabel('Curvature K')
 legend('K-S Curve', 'Peaks')
+title('Curvature Plot')
 hold off
 
 %% Trace K back and plot the corners on original image
@@ -65,4 +66,10 @@ figure;
 imshow(img)
 hold on
 scatter(x0(K_idx_peaks), y0(K_idx_peaks), 60, 'r*')
+for i = 1:length(K_idx_peaks)
+    text(x0(K_idx_peaks(i))+10, y0(K_idx_peaks(i))-5,...
+        ['(' num2str(x0(K_idx_peaks(i))),',' num2str(y0(K_idx_peaks(i))) ')']);
+end
+
+title('Corner detection on the image')
 hold off

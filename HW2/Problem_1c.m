@@ -53,7 +53,7 @@ plot(XY_array(cluster_idx==2,1),XY_array(cluster_idx==2,2),'b.','MarkerSize',12)
 plot(XY_array(cluster_idx==3,1),XY_array(cluster_idx==3,2),'g.','MarkerSize',12)
 plot(cluster_centroid(:,1),cluster_centroid(:,2),'kx',...
      'MarkerSize',15,'LineWidth',3) 
-legend('Cluster 1', 'Cluster 2', 'Cluster 3', 'Centorid')
+legend('Cluster 1', 'Centorid')
 title 'Cluster Assignments and Centroids'
 hold off
  
