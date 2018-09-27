@@ -14,24 +14,25 @@ img_BW = imcomplement(img_BW);
 img_edge = edge(img_BW);
 B = bwboundaries(img_BW, 'holes');
 B = B{1}; 
-x0 = B(:, 2); 
-y0 = B(:, 1); 
+x0 = B(:, 1); 
+y0 = B(:, 2); 
 
+%% Calculate the curvature
+gaus_fun = @(s, sigma) 1/(sigma*sqrt(2*pi))*exp(-s.^2/(2*sigma.^2)); 
 
+sigma = 5; 
+s = -100:1:100;
+gaus = gaus_fun(s, sigma);
+ 
+x = [x0; x0; x0]; 
+y = [y0; y0; y0]; 
 
-%%
-gaus_fun = @(s, sigma) 1/(sigma*sqrt(2*pi))*exp(-s^2/(2*sigma^2)); 
+X_convd = conv(x, gaus, 'same'); 
+Y_convd = conv(y, gaus, 'same'); 
 
-sigma = 3; 
-for i = 1:length(x0)-1
-    gaus(i, 1) = gaus_fun(x(i), sigma); 
-    
-    X(i, 1) = x0(i+1) - x0(i); 
-    Y(i, 1) = y0(i+1) - y0(i); 
-    
-    X(i, 1) = conv(x0(i), gaus(i), 'same'); 
-    Y(i, 1) = conv(y0(i), gaus(i), 'same'); 
-end
+n = length(x0);
+X = X_convd(n:2*n); 
+Y = Y_convd(n:2*n); 
 
 for i = 1:length(X)-1
     X_dot(i, 1) = X(i+1) - X(i); 
@@ -50,12 +51,28 @@ end
 
 
 %% Plot the diagram
-%%scatter(s(1:length(K)), K)
+K_smoothed = smooth(K, 20, 'moving');
 
+[peaks, valleys] = peakdet(K_smoothed, 0.01, 1:length(K));
 
+K_idx_peaks = peaks(:,1); 
+K_peaks = peaks(:,2); 
 
+K_idx_valleys = valleys(:,1); 
+K_valleys = valleys(:,2); 
 
+figure; 
+plot(1:length(K_smoothed), K_smoothed)
+hold on
+scatter(K_idx_peaks, K_peaks, 30, 'r*');
+scatter(K_idx_valleys, K_valleys, 30, 'r*');
 
+%% Trace K back
+figure; 
+imshow(img)
+hold on
+scatter(y0(K_idx_peaks), x0(K_idx_peaks), 30, 'r*')
+scatter(y0(K_idx_valleys), x0(K_idx_valleys), 30, 'r*')
 
 
 
