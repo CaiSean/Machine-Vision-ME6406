@@ -177,5 +177,3 @@ K = sqrt(Q(1)^2 + Q(2)^2)
 theta = atan2(Q(2), Q(1)) * 180/pi
 x_d = Q(3) - X_c
 y_d = Q(4) - Y_c
-
-%% Plot the best matched quadrilateral
