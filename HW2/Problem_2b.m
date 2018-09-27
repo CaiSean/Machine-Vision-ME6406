@@ -20,7 +20,7 @@ y0 = B(:, 1);
 %% Calculate the curvature
 gaus_fun = @(s, sigma) 1/(sigma*sqrt(2*pi))*exp(-s.^2/(2*sigma.^2)); 
 
-sigma = 5; 
+sigma = 4; 
 s = -1000:1:1000;
 gaus = gaus_fun(s, sigma);
 
@@ -28,8 +28,8 @@ X_convd = conv([x0; x0; x0], gaus, 'same');
 Y_convd = conv([y0; y0; y0], gaus, 'same'); 
 
 n = length(x0);
-X = X_convd(n:2*n-1); 
-Y = Y_convd(n:2*n-1); 
+X = X_convd(n:2*n+5); 
+Y = Y_convd(n:2*n+5); 
 
 for i = 1:length(X)-1
     X_dot(i, 1) = X(i+1) - X(i); 
@@ -42,19 +42,20 @@ for i = 1:length(X_dot)-1
 end
 
 for i = 1:length(X_ddot)
-    K(i, :) = X_dot(i)*Y_ddot(i)-Y_dot(i)*X_ddot(i)/...;
-              (X_dot(i)^2+Y_dot(i)^2)^(3/2); 
+    K(i, :) = X_dot(i)*Y_ddot(i)-Y_dot(i)*X_ddot(i);
 end
 
 %% Plot the K-S diagram and find the peaks and valleys
-K_smoothed = smooth(K, 5, 'moving');
+K_smoothed = smooth(K, 10, 'moving');
 
-[K_peaks,K_idx_peaks] = findpeaks(K_smoothed, 'MinPeakHeight',0.01);
+[K_peaks,K_idx_peaks] = findpeaks(K_smoothed, 'MinPeakHeight',0.03);
+[K_valleys,K_idx_valleys] = findpeaks(-K_smoothed, 'MinPeakHeight',0.01);
 
 figure; 
 plot(1:length(K_smoothed), K_smoothed)
 hold on
 scatter(K_idx_peaks, K_peaks, 30, 'r', '^');
+scatter(K_idx_valleys, -K_valleys, 30, 'r', 'v');
 xlabel('Number of Pixels')
 ylabel('Curvature K')
 legend('K-S Curve', 'Peaks')
@@ -66,10 +67,16 @@ figure;
 imshow(img)
 hold on
 scatter(x0(K_idx_peaks), y0(K_idx_peaks), 60, 'r*')
+scatter(x0(K_idx_valleys), y0(K_idx_valleys), 60, 'r*')
 for i = 1:length(K_idx_peaks)
     text(x0(K_idx_peaks(i))+10, y0(K_idx_peaks(i))-5,...
         ['(' num2str(x0(K_idx_peaks(i))),',' num2str(y0(K_idx_peaks(i))) ')']);
+    
 end
 
+for i = 1:length(K_idx_valleys)
+    text(x0(K_idx_valleys(i))+10, y0(K_idx_valleys(i))-5,...
+            ['(' num2str(x0(K_idx_valleys(i))),',' num2str(y0(K_idx_valleys(i))) ')']);
+end
 title('Corner detection on the image')
 hold off
