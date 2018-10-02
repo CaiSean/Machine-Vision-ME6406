@@ -18,10 +18,8 @@ end
 
 x = A\b; 
 
-r11_ = x(1); 
-r12_ = x(2); 
-r21_ = x(3); 
-r22_ = x(4); 
+r11_ = x(1); r12_ = x(2); 
+r21_ = x(3); r22_ = x(4); 
 tx_ = x(5); 
 
 clear A b x
@@ -39,10 +37,8 @@ end
 
 clear diff
 
-ty = [ty; -ty]; 
-
 %% Calculate the rotation matrix
-ty = sqrt(ty(1)^2); 
+ty = sqrt(ty^2); 
 r11 = r11_ * ty; 
 r12 = r12_ * ty; 
 r21 = r21_ * ty; 
@@ -53,14 +49,12 @@ clear r11_ r12_ r21_ r22_ tx_
 sigma_x = r11 * X_W + r12 * Y_W + tx; 
 sigma_y = r21 * X_W + r22 * Y_W + ty;
 
-flag = zeros(length(sigma_x), 1); 
-
 for i = 1:length(sigma_x)
     if sign(sigma_x(i)) == sign(X_u(i)) &&...
-       sign(sigma_x(i)) == sign(X_u(i))
-        flag(i, 1) = 1;
+       sign(sigma_y(i)) == sign(Y_u(i))
+        flag = 1;
     else 
-        flag(i, 1) = 0;
+        flag = 0;
         disp('Two coordinates are not in the same quardant')
         break; 
     end
@@ -76,8 +70,7 @@ r32 = round(temp(2), 5);
 r33 = round(temp(3), 5); 
 clear temp
 
-S1 = 1; 
-S2 = 1; 
+S1 = 1; S2 = 1; 
 
 if -sign(r11*r12 + r12*r22) == -1
     S1 = 1; 
