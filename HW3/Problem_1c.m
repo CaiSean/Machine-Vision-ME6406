@@ -64,7 +64,7 @@ clear r11_ r12_ r21_ r22_ tx_
 
 %% Check S1, S2 signs
 S1 = 1; S2 = 1; 
-S1S2 = -sign(r11*r12 + r12*r22);
+S1S2 = sign(r11*r21 + r12*r22);
 
 if S1S2 == -1
     S1 = 1; 
@@ -117,14 +117,6 @@ T = [tx; ty; tz]    % transformation matrix
 if f < 0 
     S1 = -1; 
     S2 = 1;  
-else
-    if S1S2 == -1
-        S1 = 1; 
-        S2 = 1; 
-    elseif S1S2 == 1
-        S1 = 1; 
-        S2 = -1; 
-    end
 end
 
 r13 = round(S1*sqrt(1 - r11^2 - r12^2), 2);

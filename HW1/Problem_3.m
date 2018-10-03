@@ -25,7 +25,7 @@ clear all;
 
 % Solution
 img_checker = imread('checker.png');
-[img_checker_BW,threshOut,G_x_b,G_y_b] = edge(img_checker);
+[img_checker_BW,threshOut,G_x,G_y] = edge(img_checker);
 imshow(img_checker_BW)
 
 %% Part c
