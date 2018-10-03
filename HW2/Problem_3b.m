@@ -53,8 +53,6 @@ tri_length_i_sort = [tri_length_i_sort, tri_length_i(:, 4)];
 tri_angle_t_sort = [tri_angle_t_sort, tri_angle_t(:, 4)]; 
 tri_angle_i_sort = [tri_angle_i_sort, tri_angle_i(:, 4)]; 
 
-
-
 %% Find the ratio between the template and image triangle length
 count = 1;
 length_ratio = zeros(length(tri_length_t_sort)*length(tri_length_i_sort), 5); 
@@ -70,7 +68,6 @@ for i = 1:length(tri_length_t_sort)
         
         clear ratio1 ratio2 ratio3
     end 
-    
 end
 
 %% Find the difference in angles between the template and image triangles
@@ -88,7 +85,6 @@ for i = 1:length(tri_angle_t_sort)
         
         clear diff_angle1 diff_angle2 diff_angle3
     end 
-    
 end
 
 %% Find the matched pairs
@@ -115,7 +111,7 @@ for i = 1:length(matched_pairs_length)
 end
 
 
-% Plot the best matched triangles
+%% Plot the best matched triangles
 figure; 
 
 for i = 1:length(point_loc_x_t)
