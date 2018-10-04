@@ -27,7 +27,7 @@ clear A b x
 
 Sr = r11_^2 + r12_^2 + r21_^2 + r22_^2; 
 
-diff = r11_*r22_ - r12_*r22_; 
+diff = r11_*r22_ - r12_*r21_; 
 
 if diff == 0
     ty = sqrt(1/Sr); 
