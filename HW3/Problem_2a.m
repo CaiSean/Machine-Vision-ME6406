@@ -37,7 +37,7 @@ Pr_c23 = rot_axis(n_c23, theta_c23);
 [Pr_g12, R_g12_ver1] = rot_axis(n_g12, theta_g12);
 [Pr_g23, R_g23_ver1] = rot_axis(n_g23, theta_g23);
 
-% Verfication
+% Rotation matrix verfication using equation 8
 [R_g12_ver2] = rot_verification_eq8(n_g12, theta_g12);
 [R_g23_ver2] = rot_verification_eq8(n_g23, theta_g23);
 
