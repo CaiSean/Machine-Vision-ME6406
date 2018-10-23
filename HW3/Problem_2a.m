@@ -44,25 +44,13 @@ Pr_c23 = rot_axis(n_c23, theta_c23);
 %% Part c
 A = [skew(Pr_g12+Pr_c12); skew(Pr_g23+Pr_c23)];
 B = [Pr_c12-Pr_g12; Pr_c23-Pr_g23];
-X = pinv(A)*B
+P_cg_ = pinv(A)*B;
+theta_cg = 2*atand(abs(rssq(P_cg_)));
+P_cg = 2*P_cg_/sqrt(1+abs(P_cg_)'*abs(P_cg_))
 
+alpha = sqrt(4-abs(P_cg)'*abs(P_cg));
+R_cg = (1-0.5*abs(P_cg)'*abs(P_cg))*eye(3)+0.5*(P_cg*P_cg'+alpha*skew(P_cg))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+C = [R_g12-eye(3); R_g23-eye(3)]; 
+D = [R_cg*T_c12-T_g12; R_cg*T_c23-T_g23]; 
+T_cg = pinv(C)*D
