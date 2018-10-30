@@ -37,7 +37,7 @@ img_morph_1 = and(img_morph_1, img_SE);
 
 % Dilate
 img_morph_1 = imdilate(img_morph_1, SE_chip);  % Plot the location of the chip
-figure; imshow(img_BW_1)
+% figure; imshow(img_BW_1)
 
 %% Image Process Path 2
 img_BW_2 = im2bw(img, 0.65);                        % Binaize
