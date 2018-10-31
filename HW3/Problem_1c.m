@@ -106,7 +106,7 @@ end
 x = A\B; 
 
 f = x(1)    % focus length
-k = x(2)/f  % lens distortion
+k = x(2)/f;  % lens distortion
 tz = x(3);  % z direction in transformation matrix
 
 clear A B a b c w x
