@@ -1,0 +1,171 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Machine Vision Homework 3</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-10-31"><meta name="DC.source" content="Problem_4.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Machine Vision Homework 3</h1><!--introduction--><div><ul><li>Problem 4</li><li>Author: Xinyi Cai</li></ul></div><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Housekeeping</a></li><li><a href="#2">Load the image</a></li><li><a href="#3">Define Structual Elements</a></li><li><a href="#4">Image Process Path 1</a></li><li><a href="#5">Image Process Path 2</a></li><li><a href="#6">Image Process Combining Path 1 and 2</a></li></ul></div><h2 id="1">Housekeeping</h2><pre class="codeinput">clc;
+clear <span class="string">all</span>;
+</pre><h2 id="2">Load the image</h2><pre class="codeinput">img = imread(<span class="string">'chip.jpg'</span>);
+figure; imshow(img)
+title(<span class="string">'Original Image'</span>)
+</pre><img vspace="5" hspace="5" src="Problem_4_01.png" alt=""> <h2 id="3">Define Structual Elements</h2><pre class="codeinput">SE_lead = strel(<span class="string">'rectangle'</span>, [5 11]);
+SE_chip = strel(<span class="string">'rectangle'</span>, [147 82]);
+SE_1 = strel(<span class="string">'rectangle'</span>, [8 16]);
+SE_2 = strel(<span class="string">'rectangle'</span>, [3 3]);
+SE_3 = strel(<span class="string">'rectangle'</span>, [30 74]);
+</pre><h2 id="4">Image Process Path 1</h2><pre class="codeinput">img_BW_1 = im2bw(img, 0.34);                <span class="comment">% Binaize</span>
+img_BW_1 = imcomplement(img_BW_1);          <span class="comment">% Invert</span>
+img_morph_1 = imdilate(img_BW_1, SE_1);     <span class="comment">% Dilate</span>
+img_morph_1 = imcomplement(img_morph_1);    <span class="comment">% Invert</span>
+img_morph_1 = imerode(img_morph_1, SE_2);   <span class="comment">% Erode</span>
+img_morph_1 = imcomplement(img_morph_1);    <span class="comment">% Invert</span>
+img_morph_1 = imerode(img_morph_1, SE_3);   <span class="comment">% Erode</span>
+img_morph_1 = bwmorph(img_morph_1, <span class="string">'shrink'</span>, inf); <span class="comment">% Shrink</span>
+
+<span class="comment">% Define a SE in the center</span>
+[R C] = size(img_BW_1);
+img_BG = zeros(R, C);
+img_BG(round(R/2), round(C/2)) = 1;
+img_SE = imdilate(img_BG, SE_3);
+
+<span class="comment">% Logical AND the image and the central SE</span>
+img_morph_1 = and(img_morph_1, img_SE);
+
+<span class="comment">% Dilate</span>
+img_morph_1 = imdilate(img_morph_1, SE_chip);  <span class="comment">% Plot the location of the chip</span>
+<span class="comment">% figure; imshow(img_BW_1)</span>
+</pre><h2 id="5">Image Process Path 2</h2><pre class="codeinput">img_BW_2 = im2bw(img, 0.65);                        <span class="comment">% Binaize</span>
+img_morph_2 = bwmorph(img_BW_2, <span class="string">'open'</span>);            <span class="comment">% Open</span>
+img_morph_2 = imdilate(img_morph_2, SE_lead);       <span class="comment">% Dilate</span>
+img_morph_2 = imcomplement(img_morph_2);            <span class="comment">% Invert</span>
+img_morph_2 = imdilate(img_morph_2, SE_lead);       <span class="comment">% Dilate</span>
+img_morph_2 = imcomplement(img_morph_2);            <span class="comment">% Invert</span>
+img_morph_2 = bwmorph(img_morph_2, <span class="string">'shrink'</span>, inf);  <span class="comment">% Shrink</span>
+</pre><h2 id="6">Image Process Combining Path 1 and 2</h2><pre class="codeinput">img_morph = and(img_morph_1, img_morph_2);      <span class="comment">% Logical AND</span>
+img_morph = imdilate(img_morph, SE_lead);       <span class="comment">% Dilate</span>
+figure; imshow(img_morph)
+title(<span class="string">'Final Target'</span>)
+</pre><img vspace="5" hspace="5" src="Problem_4_02.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Machine Vision Homework 3
+% * Problem 4
+% * Author: Xinyi Cai
+
+%% Housekeeping
+clc; 
+clear all; 
+
+%% Load the image
+img = imread('chip.jpg');
+figure; imshow(img)
+title('Original Image')
+
+%% Define Structual Elements
+SE_lead = strel('rectangle', [5 11]);
+SE_chip = strel('rectangle', [147 82]);
+SE_1 = strel('rectangle', [8 16]);
+SE_2 = strel('rectangle', [3 3]);
+SE_3 = strel('rectangle', [30 74]);
+
+%% Image Process Path 1
+img_BW_1 = im2bw(img, 0.34);                % Binaize
+img_BW_1 = imcomplement(img_BW_1);          % Invert
+img_morph_1 = imdilate(img_BW_1, SE_1);     % Dilate
+img_morph_1 = imcomplement(img_morph_1);    % Invert
+img_morph_1 = imerode(img_morph_1, SE_2);   % Erode
+img_morph_1 = imcomplement(img_morph_1);    % Invert
+img_morph_1 = imerode(img_morph_1, SE_3);   % Erode
+img_morph_1 = bwmorph(img_morph_1, 'shrink', inf); % Shrink
+
+% Define a SE in the center
+[R C] = size(img_BW_1); 
+img_BG = zeros(R, C); 
+img_BG(round(R/2), round(C/2)) = 1; 
+img_SE = imdilate(img_BG, SE_3); 
+
+% Logical AND the image and the central SE
+img_morph_1 = and(img_morph_1, img_SE); 
+
+% Dilate
+img_morph_1 = imdilate(img_morph_1, SE_chip);  % Plot the location of the chip
+% figure; imshow(img_BW_1)
+
+%% Image Process Path 2
+img_BW_2 = im2bw(img, 0.65);                        % Binaize
+img_morph_2 = bwmorph(img_BW_2, 'open');            % Open
+img_morph_2 = imdilate(img_morph_2, SE_lead);       % Dilate
+img_morph_2 = imcomplement(img_morph_2);            % Invert
+img_morph_2 = imdilate(img_morph_2, SE_lead);       % Dilate
+img_morph_2 = imcomplement(img_morph_2);            % Invert
+img_morph_2 = bwmorph(img_morph_2, 'shrink', inf);  % Shrink
+
+%% Image Process Combining Path 1 and 2
+img_morph = and(img_morph_1, img_morph_2);      % Logical AND
+img_morph = imdilate(img_morph, SE_lead);       % Dilate
+figure; imshow(img_morph)
+title('Final Target')
+##### SOURCE END #####
+--></body></html>

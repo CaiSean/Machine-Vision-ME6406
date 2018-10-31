@@ -1,0 +1,192 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Machine Vision Homework 3</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-10-31"><meta name="DC.source" content="Problem_3.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Machine Vision Homework 3</h1><!--introduction--><div><ul><li>Problem 3</li><li>Author: Xinyi Cai</li></ul></div><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Housekeeping</a></li><li><a href="#2">Step 1</a></li><li><a href="#3">Step 2</a></li><li><a href="#4">Step 4</a></li><li><a href="#5">Step 3</a></li><li><a href="#6">Step 5</a></li></ul></div><h2 id="1">Housekeeping</h2><pre class="codeinput">clc;
+clear <span class="string">all</span>;
+</pre><h2 id="2">Step 1</h2><pre class="codeinput">A = 4; B = 0; C = 1;
+D = -4; E = -1; F = -11;
+f = 0.1;
+
+C_mtx = [A, B, D/f;<span class="keyword">...</span>
+         B, C, E/f;<span class="keyword">...</span>
+         D/f, E/f, F/(f^2)];
+</pre><h2 id="3">Step 2</h2><pre class="codeinput">[P_mtx, D_mtx] = eig(C_mtx);
+temp = diag(D_mtx);
+temp_mtx = P_mtx;
+
+temp = sort(temp);
+a = 1/sqrt(temp(2));
+b = 1/sqrt(temp(3));
+c = 1/sqrt(-temp(1));
+
+P_mtx = [temp_mtx(:, 2), temp_mtx(:, 3), temp_mtx(:, 1)];
+
+clear <span class="string">temp</span> <span class="string">temp_mtx</span>
+</pre><h2 id="4">Step 4</h2><pre class="codeinput">r = 1;
+
+tan_alpha = (c/b)*sqrt((1-(b/a)^2)/(1+(c/a)^2));
+cos_alpha_1 = (b/a)*sqrt((1+(a/c)^2)/(1+(b/c)^2));
+cos_alpha_2 = -cos_alpha_1;
+
+gamma_1 = r*c/(a*cos_alpha_1)*sqrt((1-(b/c)^2*tan_alpha^2)/(1+tan_alpha^4));
+gamma_2 = r*c/(a*cos_alpha_2)*sqrt((1-(b/c)^2*tan_alpha^2)/(1+tan_alpha^4));
+
+<span class="keyword">if</span> gamma_1 &gt; 0
+    alpha = acos(cos_alpha_1);
+    gamma = gamma_1;
+<span class="keyword">elseif</span> gamma_2 &gt; 0
+    alpha = acos(cos_alpha_2);
+    gamma = gamma_2;
+<span class="keyword">end</span>
+
+clear <span class="string">gamma_1</span> <span class="string">gamma_2</span> <span class="string">tan_alpha</span> <span class="string">cos_alpha_1</span> <span class="string">cos_alpha_2</span>
+</pre><h2 id="5">Step 3</h2><pre class="codeinput">K1 = 1/a^2;
+K2 = cos(alpha)^2/b^2-sin(alpha)^2/c^2;
+K3 = (1/b^2+1/c^2)*sin(2*alpha)*gamma;
+K4 = (sin(alpha)^2/b^2-cos(alpha)^2/c^2)*gamma;
+</pre><h2 id="6">Step 5</h2><pre class="codeinput">Oc = P_mtx*rotx(alpha*pi/180)'*[0 -K3/(2*K2) gamma]'
+
+Nc = P_mtx*rotx(alpha*pi/180)'*[0 0 1]'
+</pre><pre class="codeoutput">
+Oc =
+
+   -0.8978
+   -0.0740
+    0.0469
+
+
+Nc =
+
+    0.0362
+    0.0091
+    0.9993
+
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Machine Vision Homework 3
+% * Problem 3
+% * Author: Xinyi Cai
+
+%% Housekeeping
+clc; 
+clear all; 
+
+%% Step 1
+A = 4; B = 0; C = 1; 
+D = -4; E = -1; F = -11; 
+f = 0.1; 
+
+C_mtx = [A, B, D/f;... 
+         B, C, E/f;... 
+         D/f, E/f, F/(f^2)]; 
+
+%% Step 2
+[P_mtx, D_mtx] = eig(C_mtx);
+temp = diag(D_mtx); 
+temp_mtx = P_mtx; 
+
+temp = sort(temp); 
+a = 1/sqrt(temp(2)); 
+b = 1/sqrt(temp(3)); 
+c = 1/sqrt(-temp(1)); 
+
+P_mtx = [temp_mtx(:, 2), temp_mtx(:, 3), temp_mtx(:, 1)];
+
+clear temp temp_mtx
+%% Step 4
+r = 1; 
+
+tan_alpha = (c/b)*sqrt((1-(b/a)^2)/(1+(c/a)^2));
+cos_alpha_1 = (b/a)*sqrt((1+(a/c)^2)/(1+(b/c)^2));
+cos_alpha_2 = -cos_alpha_1; 
+
+gamma_1 = r*c/(a*cos_alpha_1)*sqrt((1-(b/c)^2*tan_alpha^2)/(1+tan_alpha^4));
+gamma_2 = r*c/(a*cos_alpha_2)*sqrt((1-(b/c)^2*tan_alpha^2)/(1+tan_alpha^4));
+
+if gamma_1 > 0
+    alpha = acos(cos_alpha_1);
+    gamma = gamma_1; 
+elseif gamma_2 > 0
+    alpha = acos(cos_alpha_2);
+    gamma = gamma_2; 
+end
+
+clear gamma_1 gamma_2 tan_alpha cos_alpha_1 cos_alpha_2
+
+%% Step 3
+K1 = 1/a^2; 
+K2 = cos(alpha)^2/b^2-sin(alpha)^2/c^2;
+K3 = (1/b^2+1/c^2)*sin(2*alpha)*gamma; 
+K4 = (sin(alpha)^2/b^2-cos(alpha)^2/c^2)*gamma;
+
+%% Step 5
+Oc = P_mtx*rotx(alpha*pi/180)'*[0 -K3/(2*K2) gamma]'
+
+Nc = P_mtx*rotx(alpha*pi/180)'*[0 0 1]'
+##### SOURCE END #####
+--></body></html>

@@ -1,6 +1,6 @@
 %% Machine Vision Homework 3
-% Problem 4
-% Arthor: Xinyi Cai
+% * Problem 4
+% * Author: Xinyi Cai
 
 %% Housekeeping
 clc; 
@@ -8,6 +8,8 @@ clear all;
 
 %% Load the image
 img = imread('chip.jpg');
+figure; imshow(img)
+title('Original Image')
 
 %% Define Structual Elements
 SE_lead = strel('rectangle', [5 11]);
@@ -52,3 +54,4 @@ img_morph_2 = bwmorph(img_morph_2, 'shrink', inf);  % Shrink
 img_morph = and(img_morph_1, img_morph_2);      % Logical AND
 img_morph = imdilate(img_morph, SE_lead);       % Dilate
 figure; imshow(img_morph)
+title('Final Target')

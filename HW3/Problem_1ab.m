@@ -1,6 +1,6 @@
 %% Machine Vision Homework 3
-% Problem 1 Part a and b
-% Arthor: Xinyi Cai
+% * Problem 1 Part a and b
+% * Author: Xinyi Cai
 
 %% Housekeeping
 clc; 
@@ -36,6 +36,8 @@ hold on
 scatter3(X_W, Y_W, Z_W, 'r')
 scatter3(x, y, z, 'g'); 
 scatter(X_u, Y_u, 'b')
+xlabel('X'); ylabel('Y'); zlabel('Z'); 
+grid on
 legend('Global', 'Camera', 'Image')
 
 %% Save data for part c
