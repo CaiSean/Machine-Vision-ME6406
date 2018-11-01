@@ -16,7 +16,7 @@ C_mtx = [A, B, D/f;...
          D/f, E/f, F/(f^2)]; 
 
 %% Step 2
-[P_mtx, D_mtx] = eig(C_mtx);
+[P_mtx, D_mtx] = eig(C_mtx/16);
 temp = diag(D_mtx); 
 temp_mtx = P_mtx; 
 
@@ -55,6 +55,6 @@ K3 = (1/b^2+1/c^2)*sin(2*alpha)*gamma;
 K4 = (sin(alpha)^2/b^2-cos(alpha)^2/c^2)*gamma;
 
 %% Step 5
-Oc = P_mtx*rotx(alpha*pi/180)'*[0 -K3/(2*K2) gamma]'
+Oc = P_mtx*rotx(alpha*180/pi)'*[0 -K3/(2*K2) gamma]'
 
-Nc = P_mtx*rotx(alpha*pi/180)'*[0 0 1]'
+Nc = P_mtx*rotx(alpha*180/pi)'*[0 0 1]'
