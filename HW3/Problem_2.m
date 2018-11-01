@@ -1,5 +1,5 @@
 %% Machine Vision Homework 3
-% * Problem 2 Part a
+% * Problem 2
 % * Author: Xinyi Cai
 
 %% Housekeeping
