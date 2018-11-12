@@ -1,7 +1,7 @@
 % Initial weight_pj must be a Np X Nj dimension matrix
 % Initial weight_qp must be a Nq X Np dimension matrix
 
-function [y_P, y_Q]=ANN_Forward_Phase(input, weight_pj, weight_qp)
+function [y_P, y_Q] = Forward_Phase(input, weight_pj, weight_qp)
 
 Nj = length(input); 
 [Nq, Np] = size(weight_qp); 
