@@ -37,13 +37,30 @@ initial_weight_pj = 0.0001*randi([-10000, 10000], Np, Nj);
 initial_weight_qp = 0.0001*randi([-10000, 10000], Nq, Np);
 
 %% Calculation
-alpha = 0.3; 
+alpha = 0.5; 
+iteration = 1000;
 
-[y_P, y_Q]=ANN_Forward_Phase(H_input(1, :), H_out, initial_weight_pj, initial_weight_qp, Np)
-[weight_qp_new, weight_pj_new] = ANN_Backward_Phase(H_input(1, :), H_out,...
-    y_P, y_Q, initial_weight_pj, initial_weight_qp, alpha)
+for i = 1:3
+    [y_P, y_Q] = ANN_Forward_Phase(H_input(i, :), initial_weight_pj, initial_weight_qp);
+    [weight_pj_new, weight_qp_new] = ANN_Backward_Phase(H_input(i, :), H_out,...
+        y_P, y_Q, initial_weight_pj, initial_weight_qp, alpha);
 
+    for j = 1:iteration
+        [y_P, y_Q] = ANN_Forward_Phase(H_input(i, :), weight_pj_new, weight_qp_new);
+        [weight_pj_new, weight_qp_new] = ANN_Backward_Phase(H_input(i, :), H_out,...
+        y_P, y_Q, weight_pj_new, weight_qp_new, alpha);
+        Error(j) = error_cal(H_out, y_Q);
+    end
+end
 
+% plot(1:j, Error)
+
+%% Load training data files
+load testing_data.mat
+
+H_testing = testing_data{1, 1}; 
+
+[y_P_test, y_Q_test] = ANN_Forward_Phase(H_testing, weight_pj_new, weight_qp_new)
 
 
 
