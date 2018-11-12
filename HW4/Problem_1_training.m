@@ -31,7 +31,7 @@ L_out = [0 0 1 0];
 O_out = [0 0 0 1]; 
 
 alpha = 0.5; 
-iteration = 3000;
+iteration = 1000;
 
 %% Generate random weights
 Nj = 25; Np = 15; Nq = 4; 
