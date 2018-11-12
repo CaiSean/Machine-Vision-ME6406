@@ -39,118 +39,37 @@ Nj = 25; Np = 15; Nq = 4;
 initial_weight_pj = 0.0001*randi([-20000, 20000], Np, Nj);
 initial_weight_qp = 0.0001*randi([-20000, 20000], Nq, Np);
 
-%% Calculation Letter H
-int_weight_pj_H = initial_weight_pj; 
-int_weight_qp_H = initial_weight_qp; 
+%% Calculation
+[weight_pj_H, weight_qp_H, error_H] = training(H_input, H_out,...
+    initial_weight_pj, initial_weight_qp, alpha, iteration);
 
-for i = 1:3
-    [y_P_H, y_Q_H] = Forward_Phase(H_input(i, :), int_weight_pj_H, int_weight_qp_H);
-    [weight_pj_H, weight_qp_H] = Backward_Phase(H_input(i, :), H_out,...
-        y_P_H, y_Q_H, int_weight_pj_H, int_weight_qp_H, alpha);
+[weight_pj_E, weight_qp_E, error_E] = training(E_input, E_out,...
+    initial_weight_pj, initial_weight_qp, alpha, iteration);
 
-    for j = 1:iteration
-        [y_P_H, y_Q_H] = Forward_Phase(H_input(i, :), weight_pj_H, weight_qp_H);
-        [weight_pj_H, weight_qp_H] = Backward_Phase(H_input(i, :), H_out,...
-        y_P_H, y_Q_H, weight_pj_H, weight_qp_H, alpha);
-        error_H(i, j) = error_cal(H_out, y_Q_H);
-    end
-    
-    int_weight_pj_H = weight_pj_H; 
-    int_weight_qp_H = weight_qp_H; 
-    
-end
+[weight_pj_L, weight_qp_L, error_L] = training(L_input, L_out,...
+    initial_weight_pj, initial_weight_qp, alpha, iteration);
 
-%% Calculation Letter E
-int_weight_pj_E = initial_weight_pj; 
-int_weight_qp_E = initial_weight_qp; 
+[weight_pj_O, weight_qp_O, error_O] = training(O_input, O_out,...
+    initial_weight_pj, initial_weight_qp, alpha, iteration);
 
-for i = 1:3
-    [y_P_E, y_Q_E] = Forward_Phase(E_input(i, :), int_weight_pj_E, int_weight_qp_E);
-    [weight_pj_E, weight_qp_E] = Backward_Phase(E_input(i, :), E_out,...
-        y_P_E, y_Q_E, int_weight_pj_E, int_weight_qp_E, alpha);
-
-    for j = 1:iteration
-        [y_P_E, y_Q_E] = Forward_Phase(E_input(i, :), weight_pj_E, weight_qp_E);
-        [weight_pj_E, weight_qp_E] = Backward_Phase(E_input(i, :), E_out,...
-        y_P_E, y_Q_E, weight_pj_E, weight_qp_E, alpha);
-        error_E(i, j) = error_cal(E_out, y_Q_E);
-    end
-    
-    int_weight_pj_E = weight_pj_E; 
-    int_weight_qp_E = weight_qp_E; 
-end
-
-%% Calculation Letter L
-int_weight_pj_L = initial_weight_pj; 
-int_weight_qp_L = initial_weight_qp; 
-
-for i = 1:3
-    [y_P_L, y_Q_L] = Forward_Phase(L_input(i, :), int_weight_pj_L, int_weight_qp_L);
-    [weight_pj_L, weight_qp_L] = Backward_Phase(L_input(i, :), L_out,...
-        y_P_L, y_Q_L, int_weight_pj_L, int_weight_qp_L, alpha);
-
-    for j = 1:iteration
-        [y_P_L, y_Q_L] = Forward_Phase(L_input(i, :), weight_pj_L, weight_qp_L);
-        [weight_pj_L, weight_qp_L] = Backward_Phase(L_input(i, :), L_out,...
-        y_P_L, y_Q_L, weight_pj_L, weight_qp_L, alpha);
-        error_L(i, j) = error_cal(L_out, y_Q_L);
-    end
-    
-    int_weight_pj_L = weight_pj_L; 
-    int_weight_qp_L = weight_qp_L; 
-end
-
-%% Calculation Letter O
-int_weight_pj_O = initial_weight_pj; 
-int_weight_qp_O = initial_weight_qp; 
-
-for i = 1:3
-    [y_P_O, y_Q_O] = Forward_Phase(O_input(i, :), int_weight_pj_O, int_weight_qp_O);
-    [weight_pj_O, weight_qp_O] = Backward_Phase(O_input(i, :), O_out,...
-        y_P_O, y_Q_O, int_weight_pj_O, int_weight_qp_O, alpha);
-
-    for j = 1:iteration
-        [y_P_O, y_Q_O] = Forward_Phase(O_input(i, :), weight_pj_O, weight_qp_O);
-        [weight_pj_O, weight_qp_O] = Backward_Phase(O_input(i, :), O_out,...
-        y_P_O, y_Q_O, weight_pj_O, weight_qp_O, alpha);
-        error_O(i, j) = error_cal(O_out, y_Q_O);
-    end
-    
-    int_weight_pj_O = weight_pj_O; 
-    int_weight_qp_O = weight_qp_O; 
-end
+error = [error_H; error_E; error_L; error_O]; 
 
 %% Plot data
-subplot(221)
-plot(1:3*iteration, reshape(error_H', [1 3*iteration]))
-xlim([0 300])
-title('Letter H')
-xlabel('Iteration')
-ylabel('Error')
+str = {'H', 'E', 'L', 'O'}; 
 
-subplot(222)
-plot(1:3*iteration, reshape(error_E', [1 3*iteration]))
-xlim([0 300])
-title('Letter E')
-xlabel('Iteration')
-ylabel('Error')
-
-subplot(223)
-plot(1:3*iteration, reshape(error_L', [1 3*iteration]))
-xlim([0 300])
-title('Letter L')
-xlabel('Iteration')
-ylabel('Error')
-
-subplot(224)
-plot(1:3*iteration, reshape(error_O', [1 3*iteration]))
-xlim([0 300])
-title('Letter O')
-xlabel('Iteration')
-ylabel('Error')
+for i = 1:length(str)
+    subplot(2, 2, i)
+    plot(1:3*iteration, reshape(error(i*3-2:i*3, :)', [1 3*iteration]))
+    xlim([0 300])
+    title(['Letter ', str{i}])
+    xlabel('Iteration')
+    ylabel('Error')
+end
 
 %% Save weight files
 save calculated_weights.mat weight_pj_H weight_qp_H ...
     weight_pj_E weight_qp_E weight_pj_L weight_qp_L...
     weight_pj_O weight_qp_O  
+
+
 
