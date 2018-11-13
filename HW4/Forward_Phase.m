@@ -5,7 +5,7 @@ function [y_P, y_Q] = Forward_Phase(input, weight_pj, weight_qp)
 
 Nj = length(input); 
 [Nq, Np] = size(weight_qp); 
-
+% Nq = 4; Np = 15; Nj = 25; 
 %% FP: Layer P
 for i = 1:Np 
     for j = 1:Nj 

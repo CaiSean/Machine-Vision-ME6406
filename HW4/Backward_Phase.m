@@ -4,6 +4,7 @@ function [weight_pj_new, weight_qp_new] = Backward_Phase(input, output,...
 Nj = length(input); 
 [Nq, Np] = size(weight_qp_old); 
 % Nq = 4; Np = 15; Nj = 25; 
+
 %% BP: Layer Q
 for i = 1:Nq
     delta_Q(i) = y_Q(i)*(1-y_Q(i))*(output(i)-y_Q(i));
