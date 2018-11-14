@@ -34,10 +34,12 @@ tic
 toc
 
 %% Plot the graph
-figure
-plot(1:iteration, error)
+figure;
+plot(1:iteration, error, 'r')
 xlabel('Iteration')
 ylabel('Error')
+title('Squared Error vs Iteration')
+grid on
 
 %% Save weight files
 save calculated_weights.mat weight_pj weight_qp 
