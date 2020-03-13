@@ -44,7 +44,7 @@ img_morph_1 = bwmorph(img_morph_1, 'shrink', inf); % Shrink
 figure; imshow(img_morph_1); title('Path 1-8: Shrink')
 
 % Define a SE in the center
-[R C] = size(img_BW_1); 
+[R, C] = size(img_BW_1); 
 img_BG = zeros(R, C); 
 img_BG(round(R/2), round(C/2)) = 1; 
 img_SE = imdilate(img_BG, SE_3); 
